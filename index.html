@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MolChart</title>
+    <style>
+        * {
+            font-family: 'Calibri', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            /*background-color: #0000ff33;*/
+            background-color: #3498db;
+            position: relative;
+        }
+
+        #participants-container {
+            gap: 15px;
+            padding: 15px;
+            display: flex;
+            /*background-color: #ff000044;*/
+            margin-bottom: 300px;
+        }
+
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 300px;
+        }
+
+        .options-row {
+            gap: 15px;
+            padding: 15px;
+            /*background-color: #00ffff44;*/
+            flex: 1;
+            display: flex;
+        }
+
+        .square {
+            flex: 1;
+            /*background-color: #88bb66;*/
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            display: flex;
+            height: 50px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            pointer-events: none;
+        }
+
+        #svg path {
+            pointer-events: auto;
+
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="participants-container"></div>
+    <div id="options-container"></div>
+</div>
+<svg id="svg"></svg>
+<script>
+    let somethingIsSelected = false;
+
+    document.addEventListener('click', () => {
+        if (somethingIsSelected) {
+            document.querySelectorAll('div').forEach((div) => div.style.opacity = '1');
+            document.querySelectorAll('path').forEach((div) => div.style.opacity = '1');
+            somethingIsSelected = false;
+        }
+    });
+
+    const participants = ['Annelore', 'Bram', 'David', 'Franky', 'Geert', 'Jasper', 'Jeroen', 'Jurgen', 'Karen', 'Sven', 'Teun', 'Tim D.', 'Yves', 'Tim A.'];
+    const options = ['Bernard', 'Charlotte', 'Gillian', 'Karolien', 'Lynn', 'Coco', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'];
+
+    const data = [
+        {
+            'Annelore': 'Karolien',
+            'Bram': 'Karolien',
+            'David': 'Bernard',
+            'Franky': 'Coco',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Philippe',
+            'Teun': 'Coco',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Philippe',
+            'Tim A.': 'Charlotte',
+        },
+    ];
+
+    /*let optionsCopy = options.slice();
+    for (let i = 0; i < 10; i++) {
+        const dayRecord = {};
+        for (let participant of participants) {
+            dayRecord[participant] = optionsCopy[Math.floor(Math.random() * optionsCopy.length)];
+        }
+        optionsCopy.splice(Math.floor(Math.random() * optionsCopy.length), 1);
+        data.push(dayRecord);
+    }*/
+
+    const colors = [
+        '#01407e',
+        '#86be00',
+        '#ff80e9',
+        '#00b94f',
+        '#ff0d5d',
+        '#77c0ff',
+        '#6ad8c7',
+        '#57004f',
+        '#ff9f42',
+        '#962c00',
+        '#005b3b',
+        '#ff7c85',
+        '#3d2900',
+        '#dfc47b'
+    ];
+
+    participants.forEach((participant, i) => {
+        const div = document.createElement('div');
+        div.setAttribute('data-option', participant);
+        div.innerHTML = participant;
+        div.style.border = `4px solid ${colors[i]}`;
+        div.className = 'participant square';
+
+        div.addEventListener('click', (e) => {
+            if (div.style.opacity === '0') {
+                return;
+            }
+
+            e.stopPropagation();
+            somethingIsSelected = true;
+
+            for (let div of [...document.querySelectorAll('.participant')]) {
+                div.style.opacity = '0';
+            }
+
+            document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
+
+            for (let path of [...document.getElementsByTagName('path')]) {
+                path.style.opacity = '0';
+            }
+
+            for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
+                path.style.opacity = '1';
+            }
+        });
+
+        document.getElementById('participants-container').appendChild(div);
+    });
+
+    for (let i = 0; i < data.length; i++) {
+        const weekContainerDiv = document.createElement('div');
+        weekContainerDiv.setAttribute('data-week', i.toString());
+        weekContainerDiv.className = 'options-row';
+
+        const weekRecord = data[i];
+
+        for (let to of options) {
+            if (!Object.values(weekRecord).includes(to)) {
+                continue;
+            }
+
+            const optionDiv = document.createElement('div');
+            optionDiv.setAttribute('data-option', to);
+            optionDiv.innerHTML = to;
+            optionDiv.className = 'square';
+
+            optionDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                somethingIsSelected = true;
+
+                for (let div of [...document.querySelectorAll('.participant')]) {
+                    div.style.opacity = '0';
+                }
+
+                for (let path of [...document.getElementsByTagName('path')]) {
+                    path.style.opacity = '0';
+                }
+
+                for (let [participant] of Object.entries(data[i]).filter(([, innerTo]) => innerTo === to)) {
+                    for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
+                        path.style.opacity = '1';
+                    }
+                    document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
+                }
+            });
+
+            weekContainerDiv.appendChild(optionDiv);
+        }
+
+        document.getElementById('options-container').appendChild(weekContainerDiv);
+    }
+
+    const svg = document.getElementById('svg');
+
+
+    for (let i = 0; i < data.length; i++) {
+        const weekRecord = data[i];
+
+        const fromRow = i === 0 ? document.querySelector('#participants-container') : document.querySelector(`div[data-week="${i - 1}"]`);
+        const toRow = document.querySelector(`div[data-week="${i}"]`);
+
+        const weekRecordEntries = Object.entries(weekRecord);
+
+        const lines = [];
+        const fromSquareConnectionsCounters = {};
+        const toSquareConnectionCounters = {};
+
+        for (let j = 0; j < weekRecordEntries.length; j++) {
+            const [participant, to] = weekRecordEntries[j];
+            const color = colors[j];
+
+            const fromSquare = i === 0 ? fromRow.querySelector(`div[data-option="${participant}"]`) : fromRow.querySelector(`div[data-option="${data[i - 1][participant]}"]`);
+            const toSquare = toRow.querySelector(`div[data-option="${to}"]`);
+
+            if (!fromSquareConnectionsCounters[fromSquare.dataset.option]) {
+                fromSquareConnectionsCounters[fromSquare.dataset.option] = {
+                    amountOfConnections: 0,
+                    currentConnectionCount: 0
+                };
+            }
+
+            if (!toSquareConnectionCounters[toSquare.dataset.option]) {
+                toSquareConnectionCounters[toSquare.dataset.option] = {
+                    amountOfConnections: 0,
+                    currentConnectionCount: 0
+                };
+            }
+
+            fromSquareConnectionsCounters[fromSquare.dataset.option].amountOfConnections += 1;
+            toSquareConnectionCounters[toSquare.dataset.option].amountOfConnections += 1;
+
+            lines.push({fromSquare, toSquare, participant, color});
+        }
+
+        for (let {fromSquare, toSquare, participant, color} of lines) {
+            const fromSquareOffsetX = getOffsetX(fromSquareConnectionsCounters[fromSquare.dataset.option]);
+            const toSquareOffsetX = getOffsetX(toSquareConnectionCounters[toSquare.dataset.option]);
+            drawCurve(fromSquare, fromSquareOffsetX, toSquare, toSquareOffsetX, participant, i, fromSquare.dataset.option, toSquare.dataset.option, color, i);
+        }
+
+        console.log(lines);
+        console.log(toSquareConnectionCounters);
+        console.log(fromSquareConnectionsCounters);
+    }
+
+    function getOffsetX(counter) {
+        const amountOfConnections = counter.amountOfConnections;
+        if (amountOfConnections > 1) {
+            const arr = [];
+
+            if (amountOfConnections % 2 !== 0) {
+                for (let i = -Math.floor(amountOfConnections / 2); i < 0; i++) {
+                    arr.push(i);
+                }
+                arr.push(0);
+                for (let i = 1; i <= Math.floor(amountOfConnections / 2); i++) {
+                    arr.push(i);
+                }
+            } else {
+                for (let i = -Math.floor(amountOfConnections / 2); i < 0; i++) {
+                    arr.push(i + .5);
+                }
+                for (let i = 1; i <= Math.floor(amountOfConnections / 2); i++) {
+                    arr.push(i - .5);
+                }
+            }
+
+            const result = arr[counter.currentConnectionCount] * 16;
+
+            counter.currentConnectionCount += 1;
+
+            return result;
+        }
+        return 0;
+    }
+
+    function calculateControlPoints(x1, y1, x2, y2) {
+        return {
+            x1: x1,
+            y1: y1 + 300 / 2,
+            x2: x2,
+            y2: y2 - 300 / 2
+        };
+    }
+
+    function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, optionFrom, optionTo, color, row) {
+        const startRect = start.getBoundingClientRect();
+        const endRect = end.getBoundingClientRect();
+
+        const x1 = startRect.left + startRect.width / 2 + window.scrollX + startOffsetX;
+        const y1 = startRect.bottom + window.scrollY;
+        const x2 = endRect.left + endRect.width / 2 + window.scrollX + endOffsetX;
+        const y2 = endRect.top + window.scrollY;
+
+        const controlPoints = calculateControlPoints(x1, y1, x2, y2);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M${x1},${y1} C${controlPoints.x1},${controlPoints.y1} ${controlPoints.x2},${controlPoints.y2} ${x2},${y2}`);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '16px');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('data-participant', participant);
+        path.setAttribute('data-week', week);
+        path.setAttribute('data-option-from', optionFrom);
+        path.setAttribute('data-option-to', optionTo);
+        path.setAttribute('pathLength', '1');
+        setTimeout(() => path.style.animation = 'dash 2s linear forwards', row * 2000);
+
+        path.addEventListener('click', (e) => {
+            if (path.style.opacity === '0') {
+                return;
+            }
+
+            e.stopPropagation();
+            somethingIsSelected = true;
+
+            for (let div of [...document.querySelectorAll('.participant')]) {
+                div.style.opacity = '0';
+            }
+
+            document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
+
+            for (let path of [...document.getElementsByTagName('path')]) {
+                path.style.opacity = '0';
+            }
+
+            for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
+                path.style.opacity = '1';
+            }
+        });
+
+        svg.appendChild(path);
+    }
+</script>
+</body>
+</html>
