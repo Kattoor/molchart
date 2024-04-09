@@ -95,6 +95,8 @@
 <svg id="svg"></svg>
 <script>
     let somethingIsSelected = false;
+    let selectedParticipants = [];
+    let selectedOptions = [];
 
     document.addEventListener('click', (e) => {
         if (!e.ctrlKey) {
@@ -102,6 +104,8 @@
                 document.querySelectorAll('div').forEach((div) => div.style.opacity = '1');
                 document.querySelectorAll('path').forEach((div) => div.style.opacity = '1');
                 somethingIsSelected = false;
+                selectedParticipants = [];
+                selectedOptions = [];
             }
         }
     });
@@ -187,9 +191,6 @@
         '#3d2900',
         '#dfc47b'
     ];
-
-    let selectedParticipants = [];
-    let selectedOptions = [];
 
     participants.forEach((participant, i) => {
         const div = document.createElement('div');
