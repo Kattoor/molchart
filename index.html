@@ -96,15 +96,17 @@
 <script>
     let somethingIsSelected = false;
 
-    document.addEventListener('click', () => {
-        if (somethingIsSelected) {
-            document.querySelectorAll('div').forEach((div) => div.style.opacity = '1');
-            document.querySelectorAll('path').forEach((div) => div.style.opacity = '1');
-            somethingIsSelected = false;
+    document.addEventListener('click', (e) => {
+        if (!e.ctrlKey) {
+            if (somethingIsSelected) {
+                document.querySelectorAll('div').forEach((div) => div.style.opacity = '1');
+                document.querySelectorAll('path').forEach((div) => div.style.opacity = '1');
+                somethingIsSelected = false;
+            }
         }
     });
 
-    const participants = ['Annelore', 'Bram', 'David', 'Franky', 'Geert', 'Jasper', 'Jeroen', 'Jurgen', 'Karen', 'Sven', 'Teun', 'Tim D.', 'Yves', 'Tim A.'];
+    const participants = ['Annelore', 'Bram', 'David', 'Franky', 'Geert', 'Jasper', 'Jeroen', 'Jurgen', 'Karen', 'Sven', 'Teun', 'Tim A.', 'Tim D.', 'Yves'];
     const options = ['Bernard', 'Charlotte', 'Gillian', 'Karolien', 'Lynn', 'Coco', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'];
     const eliminations = ['Gillian', 'Karolien', 'Philippe'];
 
@@ -186,6 +188,9 @@
         '#dfc47b'
     ];
 
+    let selectedParticipants = [];
+    let selectedOptions = [];
+
     participants.forEach((participant, i) => {
         const div = document.createElement('div');
         div.setAttribute('data-option', participant);
@@ -194,25 +199,47 @@
         div.className = 'participant square';
 
         div.addEventListener('click', (e) => {
-            if (div.style.opacity === '0') {
+            /*if (div.style.opacity === '0') {
                 return;
-            }
+            }*/
 
             e.stopPropagation();
             somethingIsSelected = true;
 
-            for (let div of [...document.querySelectorAll('.participant')]) {
-                div.style.opacity = '0';
+            if (e.ctrlKey) {
+                if (selectedParticipants.includes(participant)) {
+                    selectedParticipants.splice(selectedParticipants.indexOf(participant), 1);
+                } else {
+                    selectedParticipants.push(participant);
+                }
+                console.log(selectedOptions, selectedParticipants);
+            } else {
+                selectedOptions = [];
+                selectedParticipants = [participant];
             }
 
-            document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
+            /*for (let div of [...document.querySelectorAll('.participant')]) {
+                div.style.opacity = '0';
+            }*/
+
+            /*document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';*/
 
             for (let path of [...document.getElementsByTagName('path')]) {
                 path.style.opacity = '0';
             }
 
-            for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
-                path.style.opacity = '1';
+            for (let participant of selectedParticipants) {
+                for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
+                    path.style.opacity = '1';
+                }
+            }
+
+            for (let {option, week} of selectedOptions) {
+                for (let [participant] of Object.entries(data[week]).filter(([, innerTo]) => innerTo === option)) {
+                    for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
+                        path.style.opacity = '1';
+                    }
+                }
             }
         });
 
@@ -222,9 +249,17 @@
     for (let i = 0; i < data.length; i++) {
         const weekContainerDiv = document.createElement('div');
         weekContainerDiv.setAttribute('data-week', i.toString());
+        weekContainerDiv.style.backgroundColor = '#00000022';
         weekContainerDiv.className = 'options-row';
 
         const weekRecord = data[i];
+
+        const weekHeader = document.createElement('div');
+        weekHeader.innerHTML = 'Week ' + (i + 1);
+        weekHeader.style.display = 'flex';
+        weekHeader.style.alignItems = 'center';
+        weekHeader.style.color = 'white';
+        weekContainerDiv.append(weekHeader);
 
         for (let to of options) {
             if (!Object.values(weekRecord).includes(to)) {
@@ -245,19 +280,40 @@
                 e.stopPropagation();
                 somethingIsSelected = true;
 
-                for (let div of [...document.querySelectorAll('.participant')]) {
-                    div.style.opacity = '0';
+                if (e.ctrlKey) {
+                    const selectedOptionIndex = selectedOptions.findIndex((selectedOption) => selectedOption.option === to && selectedOption.week === i);
+                    if (selectedOptionIndex !== -1) {
+                        selectedOptions.splice(selectedOptionIndex, 1);
+                    } else {
+                        selectedOptions.push({option: to, week: i});
+                    }
+                    console.log(selectedOptions, selectedParticipants);
+                } else {
+                    selectedOptions = [{option: to, week: i}];
+                    selectedParticipants = [];
                 }
+
+                /*for (let div of [...document.querySelectorAll('.participant')]) {
+                    div.style.opacity = '0';
+                }*/
 
                 for (let path of [...document.getElementsByTagName('path')]) {
                     path.style.opacity = '0';
                 }
 
-                for (let [participant] of Object.entries(data[i]).filter(([, innerTo]) => innerTo === to)) {
+                for (let participant of selectedParticipants) {
                     for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
                         path.style.opacity = '1';
                     }
-                    document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
+                }
+
+                for (let {option, week} of selectedOptions) {
+                    for (let [participant] of Object.entries(data[week]).filter(([, innerTo]) => innerTo === option)) {
+                        for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
+                            path.style.opacity = '1';
+                        }
+                        /*document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';*/
+                    }
                 }
             });
 
