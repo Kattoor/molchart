@@ -52,6 +52,15 @@
             height: 50px;
             align-items: center;
             justify-content: center;
+
+
+        }
+
+        @keyframes eliminate {
+            to {
+                color: white;
+                background-color: red;
+            }
         }
 
         #svg {
@@ -97,6 +106,7 @@
 
     const participants = ['Annelore', 'Bram', 'David', 'Franky', 'Geert', 'Jasper', 'Jeroen', 'Jurgen', 'Karen', 'Sven', 'Teun', 'Tim D.', 'Yves', 'Tim A.'];
     const options = ['Bernard', 'Charlotte', 'Gillian', 'Karolien', 'Lynn', 'Coco', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'];
+    const eliminations = ['Gillian', 'Karolien', 'Philippe'];
 
     const data = [
         {
@@ -130,6 +140,22 @@
             'Tim A.': 'Charlotte',
             'Tim D.': 'Stéphanie',
             'Yves': 'Philippe',
+        },
+        {
+            'Annelore': 'Coco',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Coco',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Lynn',
+            'Teun': 'Coco',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Lynn',
         },
     ];
 
@@ -209,6 +235,11 @@
             optionDiv.setAttribute('data-option', to);
             optionDiv.innerHTML = to;
             optionDiv.className = 'square';
+
+            const eliminationIndex = eliminations.indexOf(to);
+            if (eliminationIndex !== -1 && i >= eliminationIndex) {
+                setTimeout(() => optionDiv.style.animation = 'eliminate 2s linear forwards', eliminationIndex * 2000);
+            }
 
             optionDiv.addEventListener('click', (e) => {
                 e.stopPropagation();
