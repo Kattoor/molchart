@@ -238,7 +238,7 @@
 
             const eliminationIndex = eliminations.indexOf(to);
             if (eliminationIndex !== -1 && i >= eliminationIndex) {
-                setTimeout(() => optionDiv.style.animation = 'eliminate 2s linear forwards', eliminationIndex * 2000);
+                setTimeout(() => optionDiv.style.animation = 'eliminate 0.5s linear forwards', (eliminationIndex) * 2000);
             }
 
             optionDiv.addEventListener('click', (e) => {
@@ -381,7 +381,7 @@
         path.setAttribute('data-option-from', optionFrom);
         path.setAttribute('data-option-to', optionTo);
         path.setAttribute('pathLength', '1');
-        setTimeout(() => path.style.animation = 'dash 2s linear forwards', row * 2000);
+        setTimeout(() => path.style.animation = 'dash 1.5s linear forwards', row * 2000 + 500);
 
         path.addEventListener('click', (e) => {
             if (path.style.opacity === '0') {
