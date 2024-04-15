@@ -9,6 +9,7 @@ document.addEventListener('click', (e) => {
         if (somethingIsSelected) {
             document.querySelectorAll('div').forEach((div) => div.style.opacity = '1');
             document.querySelectorAll('path').forEach((div) => div.style.opacity = '1');
+            document.querySelectorAll('div').forEach((div) => div.classList.remove('selected'));
             somethingIsSelected = false;
             selectedParticipants = [];
             selectedOptions = [];
@@ -38,7 +39,7 @@ participants.forEach((participant, i) => {
     const div = document.createElement('div');
     div.setAttribute('data-option', participant);
     div.innerHTML = participant;
-    div.style.border = `4px solid ${colors[i]}`;
+    div.style.border = `0.4rem solid ${colors[i]}`;
     div.className = 'participant square';
 
     div.addEventListener('click', (e) => {
@@ -56,14 +57,20 @@ participants.forEach((participant, i) => {
             selectedParticipants = [participant];
         }
 
-        for (let path of [...document.getElementsByTagName('path')]) {
+        document.querySelectorAll('path').forEach((path) => {
             path.style.opacity = '0';
-        }
+        });
+
+        document.querySelectorAll('div').forEach((div) => {
+            div.classList.remove('selected');
+        });
 
         for (let participant of selectedParticipants) {
             for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
                 path.style.opacity = '1';
             }
+
+            document.querySelector(`#participants-container>div[data-option="${participant}"]`).classList.add('selected');
         }
 
         for (let {option, week} of selectedOptions) {
@@ -72,6 +79,8 @@ participants.forEach((participant, i) => {
                     path.style.opacity = '1';
                 }
             }
+
+            document.querySelector(`div[data-week="${week}"] > div[data-option="${option}"]`).classList.add('selected');
         }
     });
 
@@ -107,6 +116,11 @@ for (let i = 0; i < data.length; i++) {
 
         optionDiv.addEventListener('click', (e) => {
             e.stopPropagation();
+
+            if (eliminationIndex === i) {
+                return;
+            }
+
             somethingIsSelected = true;
 
             if (e.ctrlKey) {
@@ -121,14 +135,20 @@ for (let i = 0; i < data.length; i++) {
                 selectedParticipants = [];
             }
 
-            for (let path of [...document.getElementsByTagName('path')]) {
+            document.querySelectorAll('path').forEach((path) => {
                 path.style.opacity = '0';
-            }
+            });
+
+            document.querySelectorAll('div').forEach((div) => {
+                div.classList.remove('selected');
+            });
 
             for (let participant of selectedParticipants) {
                 for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
                     path.style.opacity = '1';
                 }
+
+                document.querySelector(`#participants-container>div[data-option="${participant}"]`).classList.add('selected');
             }
 
             for (let {option, week} of selectedOptions) {
@@ -137,6 +157,8 @@ for (let i = 0; i < data.length; i++) {
                         path.style.opacity = '1';
                     }
                 }
+
+                document.querySelector(`div[data-week="${week}"] > div[data-option="${option}"]`).classList.add('selected');
             }
         });
 
@@ -266,11 +288,18 @@ function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, opti
         e.stopPropagation();
         somethingIsSelected = true;
 
+        selectedParticipants = [];
+        selectedOptions = [];
+
         document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
 
-        for (let path of [...document.getElementsByTagName('path')]) {
+        document.querySelectorAll('path').forEach((path) => {
             path.style.opacity = '0';
-        }
+        });
+
+        document.querySelectorAll('div').forEach((div) => {
+            div.classList.remove('selected');
+        });
 
         for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
             path.style.opacity = '1';

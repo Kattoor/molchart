@@ -42,6 +42,41 @@
             height: 50px;
             align-items: center;
             justify-content: center;
+            z-index: 1;
+        }
+
+        @property --a {
+            syntax: '<angle>';
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        .selected::before {
+            content: '';
+            position: absolute;
+            left: -0.4rem;
+            top: -0.4rem;
+            width: calc(100% + 1px);
+            height: calc(100% + 1px);
+            background-image:
+                    linear-gradient(to right, #ecf0f1, #ecf0f1),
+                    conic-gradient(from var(--a), black, transparent, transparent, black, transparent, transparent, black);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            border: 0.4rem solid transparent;
+            z-index: -1;
+            animation: rotate 2s linear infinite;
+            border-radius: 5px;
+        }
+
+        .selected {
+            position: relative;
+        }
+
+        @keyframes rotate {
+            to {
+                --a: 360deg;
+            }
         }
 
         @keyframes eliminate {
