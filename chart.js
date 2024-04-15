@@ -4,8 +4,6 @@ let somethingIsSelected = false;
 let selectedParticipants = [];
 let selectedOptions = [];
 
-let isDrawing = false;
-
 document.addEventListener('click', (e) => {
     if (!e.ctrlKey) {
         if (somethingIsSelected) {
@@ -267,10 +265,6 @@ function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, opti
 
         e.stopPropagation();
         somethingIsSelected = true;
-
-        for (let div of [...document.querySelectorAll('.participant')]) {
-            div.style.opacity = '0';
-        }
 
         document.querySelector(`.participant[data-option="${participant}"]`).style.opacity = '1';
 
