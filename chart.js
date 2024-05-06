@@ -111,7 +111,7 @@ for (let i = 0; i < data.length; i++) {
 
         const eliminationIndex = eliminations.indexOf(to);
         if (eliminationIndex !== -1 && i >= eliminationIndex) {
-            setTimeout(() => optionDiv.style.animation = 'eliminate 0.5s linear forwards', (eliminationIndex) * 2000);
+            setTimeout(() => optionDiv.style.animation = 'eliminate 0.5s linear forwards', (eliminationIndex) * 1000);
         }
 
         optionDiv.addEventListener('click', (e) => {
@@ -278,7 +278,7 @@ function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, opti
     path.setAttribute('pathLength', '1');
     path.setAttribute('data-start-offset-x', startOffsetX);
     path.setAttribute('data-end-offset-x', endOffsetX);
-    setTimeout(() => path.style.animation = 'dash 1.5s linear forwards', week * 2000 + 500);
+    setTimeout(() => path.style.animation = 'dash 1.5s linear forwards', week * 1000 + 500);
 
     path.addEventListener('click', (e) => {
         if (path.style.opacity === '0') {
