@@ -278,7 +278,7 @@ function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, opti
     path.setAttribute('pathLength', '1');
     path.setAttribute('data-start-offset-x', startOffsetX);
     path.setAttribute('data-end-offset-x', endOffsetX);
-    setTimeout(() => path.style.animation = 'dash 1.5s linear forwards', week * 1000 + 500);
+    setTimeout(() => path.style.animation = 'dash 0.5s linear forwards', week * 1000 + 500);
 
     path.addEventListener('click', (e) => {
         if (path.style.opacity === '0') {
