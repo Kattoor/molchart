@@ -278,7 +278,11 @@ function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, opti
     path.setAttribute('pathLength', '1');
     path.setAttribute('data-start-offset-x', startOffsetX);
     path.setAttribute('data-end-offset-x', endOffsetX);
-    setTimeout(() => path.style.animation = 'dash 0.5s linear forwards', week * 1000 + 500);
+    setTimeout(() => {
+        if (!eliminations.slice(0, week + 1).includes(optionTo)) {
+            path.style.animation = 'dash 0.5s linear forwards';
+        }
+    }, week * 1000 + 500);
 
     path.addEventListener('click', (e) => {
         if (path.style.opacity === '0') {
@@ -335,3 +339,12 @@ addEventListener('resize', () => {
         moveCurve(path, startOption, +path.dataset.startOffsetX, endOption, +path.dataset.endOffsetX);
     });
 });
+
+window.scroll({top: 0, behavior: 'smooth'});
+let weekCounter = 0;
+window.setInterval(() => {
+    window.scroll({
+        top: document.querySelector(`div[data-week="${weekCounter++}"]`).getBoundingClientRect().top + window.scrollY - window.innerHeight / 2,
+        behavior: 'smooth'
+    });
+}, 1000);
