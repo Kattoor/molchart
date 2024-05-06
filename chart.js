@@ -255,6 +255,7 @@ function calculateControlPoints(x1, y1, x2, y2) {
     };
 }
 
+const tooltip = document.querySelector('#tooltip');
 function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, optionFrom, optionTo, color) {
     const startRect = start.getBoundingClientRect();
     const endRect = end.getBoundingClientRect();
@@ -308,6 +309,17 @@ function drawCurve(start, startOffsetX, end, endOffsetX, participant, week, opti
         for (let path of [...document.querySelectorAll(`path[data-participant="${participant}"]`)]) {
             path.style.opacity = '1';
         }
+    });
+
+    path.addEventListener('mousemove', (e) => {
+        tooltip.innerHTML = participant;
+        tooltip.style.visibility = 'visible';
+        tooltip.style.left = (e.clientX - tooltip.getBoundingClientRect().width / 2) + 'px';
+        tooltip.style.top = (e.clientY + window.scrollY - 50) + 'px';
+    });
+
+    path.addEventListener('mouseleave', (e) => {
+        tooltip.style.visibility = 'hidden';
     });
 
     svg.appendChild(path);

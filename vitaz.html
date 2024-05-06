@@ -59,9 +59,8 @@
             top: -0.4rem;
             width: calc(100% + 1px);
             height: calc(100% + 1px);
-            background-image:
-                    linear-gradient(to right, #ecf0f1, #ecf0f1),
-                    conic-gradient(from var(--a), black, transparent, transparent, black, transparent, transparent, black);
+            background-image: linear-gradient(to right, #ecf0f1, #ecf0f1),
+            conic-gradient(from var(--a), black, transparent, transparent, black, transparent, transparent, black);
             background-origin: border-box;
             background-clip: padding-box, border-box;
             border: 0.4rem solid transparent;
@@ -109,9 +108,20 @@
                 stroke-dashoffset: 0;
             }
         }
+
+        #tooltip {
+            position: absolute;
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10;
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
+<div id="tooltip"></div>
 <div id="container">
     <div id="participants-container"></div>
     <div id="options-container"></div>

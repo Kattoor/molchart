@@ -109,9 +109,20 @@
         stroke-dashoffset: 0;
       }
     }
+
+    #tooltip {
+      position: absolute;
+      background-color: #555;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10;
+      visibility: hidden;
+    }
   </style>
 </head>
 <body>
+<div id="tooltip"></div>
 <div id="container">
   <div id="participants-container"></div>
   <div id="options-container"></div>
