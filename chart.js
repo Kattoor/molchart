@@ -354,9 +354,13 @@ addEventListener('resize', () => {
 
 window.scroll({top: 0, behavior: 'smooth'});
 let weekCounter = 0;
-window.setInterval(() => {
+const weekScrollInterval = window.setInterval(() => {
     window.scroll({
         top: document.querySelector(`div[data-week="${weekCounter++}"]`).getBoundingClientRect().top + window.scrollY - window.innerHeight / 2,
         behavior: 'smooth'
     });
+
+    if (weekCounter === data.length) {
+        clearInterval(weekScrollInterval);
+    }
 }, 1000);
