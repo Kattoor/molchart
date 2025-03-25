@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>MolChart</title>
+    <style>
+        * {
+            font-family: 'Calibri', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: #3498db;
+        }
+
+/*        .square {
+            flex: 1;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            display: flex;
+            height: 50px;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }*/
+
+
+
+
+        #chart {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2/dist/svg.js"></script>
+</head>
+<body>
+<div id="chart"></div>
+
+
+<!--<div id="tooltip"></div>
+
+<svg id="svg"></svg>-->
+<script>
+    const participants = ['Annelore', 'Bram', 'David', 'Franky', 'Geert', 'Jasper', 'Jeroen', 'Jurgen', 'Karen', 'Sven', 'Teun', 'Tim A.', 'Tim D.', 'Yves'];
+
+    const options = [
+        { week: 0, option: ['Bernard', 'Charlotte', 'Gillian', 'Karolien', 'Lynn', 'Coco', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'] },
+        { week: 1, option: ['Bernard', 'Charlotte', 'Gillian', 'Karolien', 'Lynn', 'Coco', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'] },
+        { week: 2, option: ['Bernard', 'Charlotte', 'Lynn', 'Coco', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'] },
+        { week: 3, option: ['Bernard', 'Charlotte', 'Lynn', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'] },
+        { week: 4, option: ['Bernard', 'Charlotte', 'Michaël', 'Philippe', 'Senne', 'Stéphanie'] },
+        { week: 5, option: ['Bernard', 'Charlotte', 'Michaël', 'Philippe', 'Senne'] },
+        { week: 6, option: ['Bernard', 'Michaël', 'Senne'] }
+    ];
+    const data = [
+        {
+            'Annelore': 'Karolien',
+            'Bram': 'Karolien',
+            'David': 'Bernard',
+            'Franky': 'Coco',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Philippe',
+            'Teun': 'Coco',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Philippe',
+        },
+        {
+            'Annelore': 'Coco',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Coco',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Philippe',
+            'Teun': 'Coco',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Philippe',
+        },
+        {
+            'Annelore': 'Coco',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Coco',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Lynn',
+            'Teun': 'Coco',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Lynn',
+        },
+        {
+            'Annelore': 'Michaël',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Senne',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Lynn',
+            'Teun': 'Michaël',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Lynn',
+        },
+        {
+            'Annelore': 'Michaël',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Senne',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Michaël',
+            'Teun': 'Michaël',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Lynn',
+        },
+        {
+            'Annelore': 'Michaël',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Senne',
+            'Geert': 'Charlotte',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Michaël',
+            'Teun': 'Michaël',
+            'Tim A.': 'Charlotte',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Lynn',
+        },
+        {
+            'Annelore': 'Michaël',
+            'Bram': 'Stéphanie',
+            'David': 'Bernard',
+            'Franky': 'Senne',
+            'Geert': 'Senne',
+            'Jasper': 'Senne',
+            'Jeroen': 'Charlotte',
+            'Jurgen': 'Michaël',
+            'Karen': 'Charlotte',
+            'Sven': 'Michaël',
+            'Teun': 'Michaël',
+            'Tim A.': 'Senne',
+            'Tim D.': 'Stéphanie',
+            'Yves': 'Lynn',
+        },
+    ];
+</script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
