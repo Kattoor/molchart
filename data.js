@@ -60,6 +60,6 @@ export const data = [
         'David': 'Michèle',
         'Jurgen': 'Nimrod',
         'Tim D.': 'Hilde',
-        'Bram': 'Pasquino'
+        'Bram': 'Michèle'
     }
 ];
