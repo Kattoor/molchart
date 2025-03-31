@@ -1,4 +1,4 @@
-export const participants = ['Teun', 'Jeroen', 'Jurgen', 'David', 'Sven', 'Karen', 'Tim A.', 'Annelore', 'Jasper', 'Geert', 'Tim D.', 'Bram'];
+export const participants = ['Teun', 'Jeroen', 'Bram', 'Jurgen', 'David', 'Sven', 'Karen', 'Tim A.', 'Annelore', 'Jasper', 'Geert', 'Tim D.'];
 
 export const options = [
     {
