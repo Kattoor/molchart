@@ -1,4 +1,4 @@
-export const participants = ['Teun', 'Jeroen', 'Bram', 'Jurgen', 'David', 'Sven', 'Karen', 'Tim A.', 'Annelore', 'Jasper', 'Geert', 'Tim D.'];
+export const participants = ['Teun', 'Jeroen', 'Bram', 'Jurgen', 'Franky', 'David', 'Sven', 'Karen', 'Tim A.', 'Annelore', 'Jasper', 'Geert', 'Tim D.'];
 
 export const options = [
     {
@@ -61,7 +61,8 @@ export const data = [
         'David': 'Michèle',
         'Jurgen': 'Nimrod',
         'Tim D.': 'Hilde',
-        'Bram': 'Pasquino'
+        'Bram': 'Pasquino',
+        'Franky': 'Michèle'
     },
     {
         'Teun': 'Sarah',
@@ -75,7 +76,8 @@ export const data = [
         'David': 'Michèle',
         'Jurgen': 'Nimrod',
         'Tim D.': 'Hilde',
-        'Bram': 'Michèle'
+        'Bram': 'Michèle',
+        'Franky': 'Michèle'
     },
     {
         'Teun': 'Sarah',
@@ -89,6 +91,7 @@ export const data = [
         'David': 'Michèle',
         'Jurgen': 'Nimrod',
         'Tim D.': 'Hilde',
-        'Bram': 'Michèle'
+        'Bram': 'Michèle',
+        'Franky': 'Michèle'
     }
 ];
