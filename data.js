@@ -165,7 +165,7 @@ export const data = [
         'Geert': 'Alexy',
         'David': 'Michèle',
         'Jurgen': 'Nimrod',
-        'Tim D.': 'Hilde',
+        'Tim D.': 'Nimrod',
         'Bram': 'Michèle',
         'Franky': 'Michèle'
     },
